@@ -5,6 +5,7 @@ import UserTable from '../components/user/UserTable';
 import AddVendorModal from '../components/user/AddVendorModal';
 import SendEmailModal from '../components/user/SendEmailModal';
 import SuccessModal from '../components/common/SuccessModal';
+import { sendOtp } from '../services/authentication';
 
 const UserManagement = () => {
   const [activeTab, setActiveTab] = useState('clients');
@@ -22,6 +23,17 @@ const UserManagement = () => {
   });
   const planDropdownRef = useRef(null);
   const filterDropdownRef = useRef(null);
+
+  // useEffect(() => {
+  //   sendOtp({
+  //     email: "sinan@gmail.com"
+  //   })
+  //     .then(response => {
+
+  //     }).catch(err => {
+
+  //     })
+  // }, [])
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -100,12 +112,12 @@ const UserManagement = () => {
     <div className="flex flex-col h-full">
       {/* Fixed Dashboard Header */}
       <div className="flex-shrink-0">
-        <DashboardHeader 
-          title="User Management" 
+        <DashboardHeader
+          title="User Management"
           subtitle="Manage users, roles, and permissions"
         />
       </div>
-      
+
       {/* Scrollable Main Content */}
       <div className="flex-1 overflow-y-auto">
         <main className="container-7xl py-10 px-8">
@@ -116,7 +128,7 @@ const UserManagement = () => {
                 Manage clients, vendors, and suppliers from one central dashboard
               </p>
             </div>
-            <button 
+            <button
               onClick={() => setIsAddVendorModalOpen(true)}
               className="flex items-center gap-2 px-2 sm:px-6 py-3 bg-gradient-brand text-white rounded-xl hover:opacity-90 transition-opacity font-medium text-xs sm:text-sm text-nowrap"
             >
@@ -126,38 +138,35 @@ const UserManagement = () => {
               Add New Vendor
             </button>
           </div>
-          
+
           {/* Action Cards Section */}
           <UserActionCards />
-          
+
           {/* Tabs Section */}
           <div className="mt-8 mb-6 flex justify-center">
             <div className="relative flex bg-gray-100 p-1 rounded-xl w-full max-w-6xl">
               {/* Sliding background indicator */}
-              <div 
-                className={`absolute top-1 bottom-1 bg-gradient-brand rounded-2xl shadow-sm transition-all duration-300 ease-in-out ${
-                  activeTab === 'clients' 
-                    ? 'left-1 right-1/2 mr-0.5' 
-                    : 'left-1/2 right-1 ml-0.5'
-                }`}
+              <div
+                className={`absolute top-1 bottom-1 bg-gradient-brand rounded-2xl shadow-sm transition-all duration-300 ease-in-out ${activeTab === 'clients'
+                  ? 'left-1 right-1/2 mr-0.5'
+                  : 'left-1/2 right-1 ml-0.5'
+                  }`}
               />
               <button
                 onClick={() => setActiveTab('clients')}
-                className={`relative z-10 flex-1 px-8 py-2 rounded-2xl text-base font-medium transition-all duration-300 ${
-                  activeTab === 'clients'
-                    ? 'text-white'
-                    : 'text-black font-bold hover:text-gray-900'
-                }`}
+                className={`relative z-10 flex-1 px-8 py-2 rounded-2xl text-base font-medium transition-all duration-300 ${activeTab === 'clients'
+                  ? 'text-white'
+                  : 'text-black font-bold hover:text-gray-900'
+                  }`}
               >
                 All Clients
               </button>
               <button
                 onClick={() => setActiveTab('vendors')}
-                className={`relative z-10 flex-1 px-8 py-2 rounded-2xl text-base font-medium transition-all duration-300 ${
-                  activeTab === 'vendors'
-                    ? 'text-white'
-                    : 'text-black font-bold hover:text-gray-900'
-                }`}
+                className={`relative z-10 flex-1 px-8 py-2 rounded-2xl text-base font-medium transition-all duration-300 ${activeTab === 'vendors'
+                  ? 'text-white'
+                  : 'text-black font-bold hover:text-gray-900'
+                  }`}
               >
                 All Vendors
               </button>
@@ -171,7 +180,7 @@ const UserManagement = () => {
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 {/* Filters Button */}
                 <div className="relative w-full sm:w-auto" ref={filterDropdownRef}>
-                  <button 
+                  <button
                     onClick={() => setOpenFilterDropdown(!openFilterDropdown)}
                     className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors w-full sm:w-auto"
                   >
@@ -184,7 +193,7 @@ const UserManagement = () => {
                       {/* Join Date Filter */}
                       <div className="px-4 py-3 border-b border-gray-100">
                         <label className="block text-sm font-semibold text-gray-900 mb-2">Join Date</label>
-                        <select 
+                        <select
                           value={filters.joinDate}
                           onChange={(e) => handleFilterSelect('joinDate', e.target.value)}
                           className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
@@ -200,7 +209,7 @@ const UserManagement = () => {
                       {/* Main Category Filter */}
                       <div className="px-4 py-3 border-b border-gray-100">
                         <label className="block text-sm font-semibold text-gray-900 mb-2">Main Category</label>
-                        <select 
+                        <select
                           value={filters.mainCategory}
                           onChange={(e) => handleFilterSelect('mainCategory', e.target.value)}
                           className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
@@ -216,7 +225,7 @@ const UserManagement = () => {
                       {/* All Status Filter */}
                       <div className="px-4 py-3 border-b border-gray-100">
                         <label className="block text-sm font-semibold text-gray-900 mb-2">All Status</label>
-                        <select 
+                        <select
                           value={filters.status}
                           onChange={(e) => handleFilterSelect('status', e.target.value)}
                           className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
@@ -266,7 +275,7 @@ const UserManagement = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
-                  
+
                   {openPlanDropdown && (
                     <div className="absolute top-full left-0 mt-1 w-full bg-white rounded-2xl shadow-xl border border-gray-100 z-50 py-2">
                       {activeTab === 'clients' ? (
@@ -341,14 +350,13 @@ const UserManagement = () => {
                 </button>
 
                 {/* Send Email */}
-                <button 
+                <button
                   onClick={handleSendEmailClick}
                   disabled={selectedUsers.length === 0}
-                  className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl transition-colors w-full sm:w-auto ${
-                    selectedUsers.length > 0 
-                      ? 'bg-pink-100 text-pink-500 border border-pink-500' 
-                      : 'border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed'
-                  }`}
+                  className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl transition-colors w-full sm:w-auto ${selectedUsers.length > 0
+                    ? 'bg-pink-100 text-pink-500 border border-pink-500'
+                    : 'border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed'
+                    }`}
                 >
                   <svg className={`w-4 h-4 ${selectedUsers.length > 0 ? 'text-pink-500' : 'text-gray-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v10a2 2 0 002 2z" />
@@ -359,10 +367,10 @@ const UserManagement = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Users Table Section */}
           <div className="mt-4">
-            <UserTable 
+            <UserTable
               userType={activeTab}
               selectedPlan={selectedPlan}
               filters={filters}
@@ -373,7 +381,7 @@ const UserManagement = () => {
       </div>
 
       {/* Add Vendor Modal */}
-      <AddVendorModal 
+      <AddVendorModal
         isOpen={isAddVendorModalOpen}
         onClose={() => setIsAddVendorModalOpen(false)}
       />
@@ -382,7 +390,7 @@ const UserManagement = () => {
       <SendEmailModal
         isOpen={isEmailModalOpen}
         onClose={() => setIsEmailModalOpen(false)}
-        userData={{ 
+        userData={{
           email: `${selectedUsers.length} ${activeTab === 'clients' ? 'clients' : 'vendors'} selected`,
           isMultiple: true,
           users: selectedUsers
