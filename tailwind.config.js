@@ -8,9 +8,18 @@ module.exports = {
 
     extend: {
       colors: {
+        // Brand colors
+        brand: {
+          primary: '#E31B95',
+          secondary: '#FF295D',
+          tertiary: '#C817AE',
+        },
         // Style guide colors
         primary: {
           DEFAULT: '#E31B95',
+          from: "#FF295D",
+          mid: "#E31B95",
+          to: "#C817AE",
           50: '#FCE7F3',
           100: '#F9A8D4',
           500: '#E31B95',

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import Dashboard from './pages/Dashboard'
 import AdminLogin from './pages/AdminLogin'
 import UserManagement from './pages/UserManagement'
@@ -18,7 +19,7 @@ import './styles/design-system.css'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('dashboard')
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const { isAuthenticated } = useSelector((state) => state.auth)
 
   const renderPage = () => {
     switch (currentPage) {
@@ -52,7 +53,7 @@ function App() {
   }
 
   if (!isAuthenticated) {
-    return <AdminLogin onLogin={() => setIsAuthenticated(true)} />;
+    return <AdminLogin />;
   }
   return (
     <div className="h-screen bg-gray-50 flex overflow-hidden">
